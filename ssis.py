@@ -104,7 +104,7 @@ class SSISApp(tk.Tk):
         initialize_database()
 
         # Window Branding & Configuration
-        self.title("Simple Student Information System (SSIS) - MSU-IIT")
+        self.title("Simple Student Information System (SSIS)")
         self.geometry("1024x680")
         self.minimum_width = 850
         self.minimum_height = 550
@@ -175,7 +175,7 @@ class SSISApp(tk.Tk):
                                font=("Segoe UI", 15, "bold"), fg="#ffffff", bg=self.brand_red)
         title_label.pack(anchor=tk.W, padx=24, pady=(13, 0))
         
-        subtitle_label = tk.Label(header, text="Mindanao State University - Iligan Institute of Technology | Academic Database Launcher", 
+        subtitle_label = tk.Label(header, text="Academic Database Launcher", 
                                   font=("Segoe UI", 9), fg="#fbcfe8", bg=self.brand_red)
         subtitle_label.pack(anchor=tk.W, padx=24, pady=(0, 10))
 
