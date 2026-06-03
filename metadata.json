@@ -1,0 +1,5 @@
+{
+  "name": "Simple Student Information System (Python)",
+  "description": "A basic CRUD application for managing students using PyScript and LocalStorage.",
+  "requestFramePermissions": []
+}

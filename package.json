@@ -1,0 +1,14 @@
+{
+  "name": "python-student-information-system",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "python3 ssis.py",
+    "build": "mkdir -p dist && echo '<html><head><title>Python Standalone App</title><link href=\"https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css\" rel=\"stylesheet\"></head><body class=\"bg-slate-50 flex items-center justify-center min-h-screen font-sans\"><div class=\"bg-white p-8 rounded-none border border-slate-200 shadow-xl max-w-md text-center\"><div class=\"w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4\"><svg class=\"w-8 h-8 text-red-700\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z\"></path></svg></div><h1 class=\"text-xl font-bold text-slate-800 mb-2\">Standalone Python App Active</h1><p class=\"text-slate-500 text-sm mb-6\">The Simple Student Information System is now a 100% pure Python local desktop application. No Node.js, NPM, Vite, or local web servers are used.</p><div class=\"bg-slate-50 p-4 border border-slate-100 text-left rounded mb-6\"><h2 class=\"text-xs font-bold text-slate-700 uppercase tracking-wider mb-2\">To Run Locally on your VS Code:</h2><ol class=\"text-xs text-slate-600 list-decimal list-inside space-y-1\"><li>Ensure Python 3 is installed</li><li>Open terminal: <code>Ctrl + &#96;</code></li><li>Run: <code>python ssis.py</code></li></ol></div><div class=\"text-xs text-slate-400 font-mono\">SSIS v1.0.0 • Pure Python & Tkinter</div></div></body></html>' > dist/index.html",
+    "preview": "echo 'No web preview required for standalone Python script'",
+    "lint": "echo 'No TS linting needed'"
+  },
+  "dependencies": {},
+  "devDependencies": {}
+}
