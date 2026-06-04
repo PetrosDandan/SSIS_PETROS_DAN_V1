@@ -677,10 +677,7 @@ class FormDialog(tk.Toplevel):
                 widget.grid(row=current_idx, column=0, sticky=tk.EW, pady=(0, 10), ipady=4)
                 self.inputs[f['name']] = var
                 
-                # Freeze primary key editing if we are in Edit mode
-                pk_to_freeze = 'id' if self.current_view == 'students' else 'code'
-                if self.mode == 'edit' and f['name'] == pk_to_freeze:
-                    widget.config(state="disabled", bg="#e2e8f0", fg=self.parent.text_muted)
+                # Primary key is editable in edit mode to allow renaming (cascades handled on save)
 
             elif f['type'] == 'combo':
                 var = tk.StringVar()
@@ -777,7 +774,58 @@ class FormDialog(tk.Toplevel):
                     break
             
             if idx_to_replace != -1:
-                # Merge old PK with newly edited data
+                # Handle primary-key rename and referential cascades
+                old_pk = self.target_pk
+                new_pk = data_packet.get(pk_field, '')
+
+                # If PK changed, ensure no duplicate exists
+                if new_pk.upper() != old_pk.upper():
+                    if any(r.get(pk_field, '').upper() == new_pk.upper() for r in all_records):
+                        messagebox.showerror(
+                            "Conflict Discovered",
+                            f"Action aborted!\n\nA record inside the \"{self.current_view}\" tables already contains the Primary Key code: \"{new_pk}\"."
+                        )
+                        return
+
+                    # Cascade updates for related tables when codes change
+                    if self.current_view == 'programs':
+                        # Update students referencing this program code
+                        students = load_data(DB_FILES['students'])
+                        for s in students:
+                            if s.get('programCode', '').upper() == old_pk.upper():
+                                s['programCode'] = new_pk
+                        save_data(DB_FILES['students'], ['id', 'firstname', 'lastname', 'programCode', 'year', 'gender'], students)
+
+                    if self.current_view == 'colleges':
+                        # Update programs referencing this college code
+                        programs = load_data(DB_FILES['programs'])
+                        for p in programs:
+                            if p.get('collegeCode', '').upper() == old_pk.upper():
+                                p['collegeCode'] = new_pk
+                        save_data(DB_FILES['programs'], ['code', 'name', 'collegeCode'], programs)
+
+                # Referential integrity: validate parent existence for students/programs
+                if self.current_view == 'students':
+                    # Ensure programCode exists
+                    programs = load_data(DB_FILES['programs'])
+                    if not any(p.get('code', '').upper() == data_packet.get('programCode', '').upper() for p in programs):
+                        messagebox.showerror(
+                            "Referential Integrity",
+                            f"Invalid Program Code \"{data_packet.get('programCode')}\". Please choose an existing program."
+                        )
+                        return
+
+                if self.current_view == 'programs':
+                    # Ensure collegeCode exists
+                    colleges = load_data(DB_FILES['colleges'])
+                    if not any(c.get('code', '').upper() == data_packet.get('collegeCode', '').upper() for c in colleges):
+                        messagebox.showerror(
+                            "Referential Integrity",
+                            f"Invalid College Code \"{data_packet.get('collegeCode')}\". Please choose an existing college."
+                        )
+                        return
+
+                # Apply the updated record
                 all_records[idx_to_replace] = data_packet
             else:
                 messagebox.showerror("Error", "The target data packet could not be resolved inside database records.")
